@@ -278,8 +278,8 @@ namespace WPCordovaClassLib.Cordova.Commands
                 return;
             }
 
-
-            if (this.player == null || this.player.Source.AbsolutePath.LastIndexOf(filePath) < 0)
+            filePath = filePath.Replace("\\", "/");
+            if (this.player == null || null == this.player.Source || this.player.Source.AbsoluteUri.LastIndexOf(filePath) < 0)
             {
                 try
                 {
@@ -301,6 +301,9 @@ namespace WPCordovaClassLib.Cordova.Commands
                                     this.player.Name = "playerMediaElement";
                                     grid.Children.Add(this.player);
                                     this.player.Visibility = Visibility.Visible;
+                                    this.player.MediaOpened += MediaOpened;
+                                    this.player.MediaEnded += MediaEnded;
+                                    this.player.MediaFailed += MediaFailed;
                                 }
                                 if (this.player.CurrentState == System.Windows.Media.MediaElementState.Playing)
                                 {
@@ -308,9 +311,6 @@ namespace WPCordovaClassLib.Cordova.Commands
                                 }
 
                                 this.player.Source = null; // Garbage collect it.
-                                this.player.MediaOpened += MediaOpened;
-                                this.player.MediaEnded += MediaEnded;
-                                this.player.MediaFailed += MediaFailed;
                             }
                         }
                     }
@@ -401,14 +401,16 @@ namespace WPCordovaClassLib.Cordova.Commands
         /// </summary>
         private void MediaOpened(object sender, RoutedEventArgs arg)
         {
-            if (this.player != null)
+            MediaElement playerElement = (MediaElement)sender;
+
+            if (playerElement != null)
             {
-                this.duration = this.player.NaturalDuration.TimeSpan.TotalSeconds;
+                this.duration = playerElement.NaturalDuration.TimeSpan.TotalSeconds;
                 InvokeCallback(MediaDuration, this.duration, false);
                 //this.handler.InvokeCustomScript(new ScriptCallback(CallbackFunction, this.id, MediaDuration, this.duration),false);
                 if (!this.prepareOnly)
                 {
-                    this.player.Play();
+                    playerElement.Play();
                     this.SetState(PlayerState_Running);
                 }
                 this.prepareOnly = false;
@@ -424,7 +426,9 @@ namespace WPCordovaClassLib.Cordova.Commands
         /// </summary>
         private void MediaEnded(object sender, RoutedEventArgs arg)
         {
+            MediaElement playerElement = (MediaElement)sender;
             this.SetState(PlayerState_Stopped);
+            playerElement.Source = null;
         }
 
         /// <summary>
@@ -432,7 +436,12 @@ namespace WPCordovaClassLib.Cordova.Commands
         /// </summary>
         private void MediaFailed(object sender, RoutedEventArgs arg)
         {
-            player.Stop();
+            MediaElement playerElement = (MediaElement)sender;
+            if (playerElement != null)
+            {
+                playerElement.Stop();
+                playerElement.Source = null;
+            }
             InvokeCallback(MediaError, MediaErrorStartingPlayback, false);
             //this.handler.InvokeCustomScript(new ScriptCallback(CallbackFunction, this.id, MediaError.ToString(), "Media failed"),false);
         }
@@ -490,7 +499,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             if ((this.state == PlayerState_Running) || (this.state == PlayerState_Paused))
             {
                 this.player.Stop();
-
+                this.player.Source = null;
                 this.player.Position = new TimeSpan(0L);
                 this.SetState(PlayerState_Stopped);
             }
