@@ -20,3 +20,13 @@
 -->
 # Release Note X
 
+
+### 0.2.7 Wed Jan 08 2014 15:15:13 GMT+0800 (CST)
+ *  added releasenotex.md
+ *  CB-5719 Updated version and RELEASENOTES.md for release 0.2.7
+ *  CB-5658 Update license comment formatting of doc/index.md
+ *  CB-5658 Add doc.index.md for Media plugin
+ *  CB-5658 Delete stale snapshot of plugin docs
+ *  Adding READ_PHONE_STATE to the plugin permissions
+ *  [CB-5565] Incremented plugin version on dev branch.
+ *  [CB-5565] Updated version and RELEASENOTES.md for release 0.2.6
