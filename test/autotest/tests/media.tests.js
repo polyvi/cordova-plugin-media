@@ -129,6 +129,11 @@ describe('Media', function () {
                 expect(result).toBeDefined();
                 expect(result.code).toBe(MediaError.MEDIA_ERR_ABORTED);
             });
+
+        //bb10 dialog pops up, preventing tests from running
+        if (cordova.platformId === 'blackberry10') {
+            return;
+        }
             
         runs(function () {
             badMedia = new Media("invalid.file.name", win,fail);
@@ -144,7 +149,13 @@ describe('Media', function () {
 	});
 
     it("media.spec.12 position should be set properly", function() {
-        var media1 = new Media("http://cordova.apache.org/downloads/BlueZedEx.mp3"),
+        var playcomplete = jasmine.createSpy();
+        var fail = jasmine.createSpy();
+        var mediaState=Media.MEDIA_STOPPED;
+        var statuschange= function(statusCode){
+            mediaState=statusCode;
+        };
+        var media1 = new Media("http://cordova.apache.org/downloads/BlueZedEx.mp3",playcomplete,fail,statuschange),
             test = jasmine.createSpy().andCallFake(function(position) {
                     console.log("position = " + position);
                     expect(position).toBeGreaterThan(0.0);
@@ -154,21 +165,43 @@ describe('Media', function () {
 
         media1.play();
 
-        waits(5000);
+        if (cordova.platformId !== 'blackberry10') {
+            waitsFor(function () { return mediaState==Media.MEDIA_RUNNING; }, 10000);
+        } else {
+            waits(5000);
+        }
 
+        // make sure we are at least one second into the file
+        waits(1000);
         runs(function () {
+            expect(fail).not.toHaveBeenCalled();
+             // note that the file is about 60 seconds long and we kill the play almost immediately
+             // as a result, the playcomplete should not happen
+            expect(playcomplete).not.toHaveBeenCalled();
             media1.getCurrentPosition(test, function () {});
         });
 
-        waitsFor(function () { return test.wasCalled; }, Tests.TEST_TIMEOUT);
+        waitsFor(function () { return test.wasCalled || fail.wasCalled; }, Tests.TEST_TIMEOUT);
     });
 
     it("media.spec.13 duration should be set properly", function() {
-        var media1 = new Media("http://cordova.apache.org/downloads/BlueZedEx.mp3");
+
+        if (cordova.platformId === 'blackberry10') {
+            return;
+        }
+
+        var win = jasmine.createSpy();
+        var fail = jasmine.createSpy();
+        var mediaState=Media.MEDIA_STOPPED;
+        var statuschange= function(statusCode){
+            mediaState=statusCode;
+        };
+        var media1 = new Media("http://cordova.apache.org/downloads/BlueZedEx.mp3",win,fail,statuschange);
         media1.play();
-        waits(5000);
+        waitsFor(function () { return mediaState==Media.MEDIA_RUNNING; }, 10000);
         runs(function () {
             expect(media1.getDuration()).toBeGreaterThan(0.0);
+            expect(fail).not.toHaveBeenCalled();
         });
     });
 });
