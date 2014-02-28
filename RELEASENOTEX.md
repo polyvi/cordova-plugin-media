@@ -31,3 +31,13 @@
  *  [CB-5565] Incremented plugin version on dev branch.
  *  [CB-5565] Updated version and RELEASENOTES.md for release 0.2.6
  *  sync cordova-mobile-spec test into cordova-plugin-media
+
+
+## 0.2.8 (Fri Feb 28 2014)
+
+
+ *  CB-5980 Updated version and RELEASENOTES.md for release 0.2.8
+ *  Add preliminary support for Tizen.
+ *  [CB-4755] Fix crash in Media.setVolume on iOS
+ *  Delete stale test/ directory
+ *  CB-5719 Incremented plugin version on dev branch.
