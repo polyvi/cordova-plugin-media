@@ -45,20 +45,6 @@
             html5Video.play();
         }
 
-        function playWebVideoWithNativeForAndroid4(src) {
-            var path = src;
-            var nativeVideo = new Video(path, onSuccess, onError);
-            nativeVideo.play();
-        }
-
-        function onSuccess(msg) {
-            eventOutput(msg);
-        }
-
-        function onError(errorcode) {
-            eventOutput("play video error"+errorcode);
-        }
-
         var eventOutput = function(s) {
             var el = document.getElementById("video_status");
             el.innerHTML =  s;
@@ -70,11 +56,9 @@
        <div id="descr">
         测试说明: <br/>
         <android>
-           1、Android 2.x仅播放html5的 <br/>
-           2、Android 4.x仅播放"xxx in Android 4.x only"且需安装播放器 <br/>
-           3、确保workspace 下面有相应的文件 <br/>
-           4、播放网络文件可能存在问题 <br/>
-           5、魅族M9对html5播放本地视频不支持，故play local video1  with html5和play local video2  with html5两个测试不会通过，忽略<br/>
+           1、本测试只针对于Android 2.x系统的手机（由于Android手机对HTML5的video支持不好，不是所有2.x系统手机都可以播放），Android 4.x手机不需要测试 <br/>
+           2、播放网络文件可能存在问题 <br/>
+           3、魅族M9对html5播放本地视频不支持，故play local video1  with html5和play local video2  with html5两个测试不会通过，忽略<br/>
         </android>
         <ios>
            1、确保本页面的同级目录下存在相应的文件
@@ -96,9 +80,6 @@
         <div class="btn large" onclick="playWebVideoWithHtml5(videoSrcList[0]);">play web video with html5</div>
         <div class="btn large" onclick="playWebVideoWithHtml5(videoSrcList[1]);">play local video1  with html5</div>
         <div class="btn large" onclick="playWebVideoWithHtml5(videoSrcList[2]);">play local video2  with html5</div>
-        <div class="btn large" data-platform="android" onclick="playWebVideoWithNativeForAndroid4(videoSrcList[0]);">play web video in Android 4.x only</div>
-        <div class="btn large" data-platform="android" onclick="playWebVideoWithNativeForAndroid4(videoSrcList[1]);">play local video1 in Android 4.x only</div>
-        <div class="btn large" data-platform="android" onclick="playWebVideoWithNativeForAndroid4(videoSrcList[2]);">play local video2 in Android 4.x only</div>
     <h2> </h2>
         <div class="backBtn" onclick="window.history.back();">Back</div>
   </body>
