@@ -41,3 +41,25 @@
  *  [CB-4755] Fix crash in Media.setVolume on iOS
  *  Delete stale test/ directory
  *  CB-5719 Incremented plugin version on dev branch.
+
+
+## 0.2.9 (Tue Apr 29 2014)
+
+
+ *  CB-6452 Updated version and RELEASENOTES.md for release 0.2.10
+ *  CB-6465: Add license headers to Tizen code
+ *  CB-6460: Update license headers
+ *  CB-6422 [windows8] use cordova/exec/proxy
+ *  CB-6212 iOS: fix warnings compiled under arm64 64-bit
+ *  CB-6225 - Media plugin does not specify a dependency on File plugin 1.0.1
+ *  Add NOTICE file
+ *  Add NOTICE file
+ *  CB-6114 Incremented plugin version on dev branch.
+ *  CB-6114 Updated version and RELEASENOTES.md for release 0.2.9
+ *  CB-6051: Android: Allow media plugin to handle invalid file locations
+ *  CB-6051: Update media plugin to work with new cdvfile:// urls
+ *  CB-5980 Incremented plugin version on dev branch.
+ *  CB-5980 Updated version and RELEASENOTES.md for release 0.2.8
+ *  CB-5748 Make sure that Media.onStatus is called when recording is started.
+ *  issue 1: video can't be played in Android 4.x. Bug reason:Video tag was not supported. Solution:Add video extension at xface-extension-video
+ *  Incremented plugin version on dev branch to 0.2.9-dev
